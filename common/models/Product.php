@@ -150,7 +150,7 @@ class Product extends \yii\db\ActiveRecord
         $ok = parent::save($runValidation, $attributeNames);
         echo "movedi".$ok;
 
-        if($ok){
+        if($ok && $this->imageFile){
             $fullPath =Yii::getAlias('@frontend/web/storage'.$this->image);
             $dir = dirname($fullPath);
             echo "movedi 1";
@@ -162,15 +162,18 @@ class Product extends \yii\db\ActiveRecord
             }
 
             echo "movedi 3";
-            $transaction->commit();
         }
 
+        $transaction->commit();
 
         return $ok;
     }
 
     public function getImageUrl(){
-        return Yii::$app->params['frontendUrl'].'/storage'.$this->image;
+        if($this->image){
+            return Yii::$app->params['frontendUrl'].'/storage'.$this->image;
+        }
+        return Yii::$app->params['frontendUrl'].'/img/no_image_available.png';
     }
 
     // echo '<pre>';
